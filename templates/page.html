@@ -1,0 +1,58 @@
+{% extends theme("layout.html") %}
+
+{% block head %}
+  {{ super() }}
+  <script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename = 'js/vizhash.min.js') }}"></script>
+  <script>
+      var addHash = function(val) {
+        try {
+          if (vizhash.supportCanvas()) {
+            var vhash = vizhash.canvasHash(val, 64, 64);
+            $("." + val).each(function(index) {
+              $(this).html( vhash.toImage() );
+            });
+           }
+         }
+         catch (err) {
+           alert(err);
+         }       
+     }
+
+       {% if config.COMMENTS == 'YES' and page.comments %}
+         window.onload = function() {      
+         {% for comment in page.comments %}
+           addHash("{{ comment.author }}");
+         {% endfor %}       
+        }
+       {% endif %}
+  </script>
+{% endblock %}
+
+{% block content %}
+  <h3>{{ page.title }}</h3>
+  
+  {% if page.published %}
+  <hr />
+  <header class="subheader">
+      <span class="label">Date</span>
+          <i class="fi-calendar"></i> {{ page.published | date('EE dd MMMM YYYY') }}
+      {% if page.category %}
+      <span class="large label"> {{ _('Category') }}</span><a href="{{ url_for('category', category = page.category) }}"> {{ page.category }} </a>
+      {% endif %}
+      {% if page.tags %}
+        <span class="large label"> {{ _('Tags') }}</span> 
+        {% for tag in page.tags.split(',') %}
+          <a href="{{ url_for('tag', tag = tag) }}">{{ tag }}</a>&nbsp;
+        {% endfor %}
+      {% endif %}
+  </header><!-- /.post-info -->
+  {% endif %}
+  <hr />
+  <article>
+  {{ page }}
+  </article>
+  {% include "page_bottom.html" %}
+{% endblock %}
+
+

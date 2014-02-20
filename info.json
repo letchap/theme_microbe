@@ -1,0 +1,10 @@
+{
+    "application": "microbe",
+    "identifier": "letchap",
+    "name": "Letchap",
+    "author": "Letchap",
+    "license": "WTFPL",
+    "description": "Clear theme for Microbe app using Foundation framework",
+    "version": "0.0.1",
+    "preview": "theme-letchap.png"
+}

@@ -1,0 +1,29 @@
+{% extends theme("layout.html") %}
+
+{% block content %}
+{% if title %}
+  <h3>{{ title }}</h3>
+{% endif %}
+{% for page in pages %}
+  <article>
+    <a href="{{ url_for('page', path = page.path) }}">
+      <h3 class="article-title">{{ page.title }}</h3>
+    </a>
+    <h6 class="subheader">
+      {{ page.published | date('EE dd MMMM YYYY') }}
+      {% if page.comments and config.COMMENTS == 'YES' %}
+        {% with total = page.comments | length %}
+          | {{ ngettext('%(num)s comment', '%(num)s comments', total) }}
+        {% endwith %}  
+      {% endif %}
+    </h6>
+    {{ page.summary | safe }}
+    <a class="button radius tiny" href="{{ url_for('page', path = page.path) }}">{{ _('Read more') }}</a>
+  </article>
+  <hr />
+{% endfor %}
+<br />
+<div class = "pagination-centered">
+  {{ pagination.links | safe }}
+</div>
+{% endblock %}
