@@ -1,29 +1,12 @@
-<!doctype html>
-<html class="no-js" lang="en">
-<!--[if'IE'9]><html'class="lt#ie10"'lang="en"'>'<![endif]-->
+{% extends theme("base.html") %}
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="{{ config.AUTHOR }}">
-  <title>{% block title %}{{ config.SITENAME }}{% endblock %}</title>
-
-  <!-- Style -->
-  
-  <link rel="stylesheet" href="{{ theme_static('css/foundation.min.css') }}"/>
-  <link rel="stylesheet" href="{{ theme_static('css/normalize.css') }}"/>
-  <link rel="stylesheet" href="{{ theme_static('css/pygments.css') }}"/>
-  <link rel="stylesheet" href="{{ theme_static('css/foundation-icons.css') }}"/>
-  <link rel="stylesheet" href="{{ theme_static('css/style.css') }}"/>
-
-  <script src="{{ theme_static('js/vendor/modernizr.js') }}"></script>
-
-</head>
-  
-<body>
+{% block head %}
+  {{ super() }}
+{% endblock %}
 
 <!--'body'content'here'-->
   <!-- Nav Bar -->
+  {% block topbar %}
   <nav class="top-bar" data-topbar>
     <ul class="title-area">
       <!-- Title Area -->
@@ -65,8 +48,10 @@
       </ul>
     </section>
   </nav>
+  {% endblock %}
  
   <!-- Main Blog Content -->
+  {% block main %}
   <section role="main">
     <div class="myheader">
       <div class="row">
@@ -99,24 +84,36 @@
   		      <li><a href="{{ url_for('category', category = cat) }}">{{ cat }}</a></li>
             {% endfor %}
   		    {% endif %}
-          <li class='divider'>
-          <li class="heading">Blogroll</h4></li>
-            <li><a href="https://joacodepel.tk/hg/microbe/summary">Get Microbe</a></li>
-            <li><a href="http://flask.pocoo.org/">Flask</a></li>
-          <li class='divider'>
-          <li class="heading">Social</h4></li>
-            <li><a href="https://twitter.com/letchap">
-            <i class="fi-social-twitter medium"></i> Twitter</a></li>
+          {% if g.links %}
+            {% for category, links in g.links.iteritems() %}
+              {% if links %}
+              <li class="divider">
+              <li class="heading">{{ category | title}}</li>
+                {% for link in links %}
+                <li>{{ link.html | safe }}</li>
+                {% endfor %}
+              {% endif %}
+
+            {% endfor %}
+          {% endif %}
+
           </ul>		 
         </div>
       </aside>
     <!-- End Sidebar -->
     </div>
  
+
+
+
+
+
+
+
   <!-- End Main Content and Sidebar -->
 
   <!-- Footer -->
- 
+    {% block footer %}
     <footer class="row">
       <div class="large-12 columns">
         <div class="row">
@@ -126,13 +123,10 @@
         </div>
       </div>
     </footer>
+    {% endblock %}
   </section>
+  {% endblock %}
  
   <!-- End Footer -->
 
-  <script src="{{ theme_static('js/vendor/jquery.js') }}"></script>
-  <script src="{{ theme_static('js/foundation.min.js') }}"></script>
-  <script>
-      $(document).foundation();
-  </script>
-</body>	
+
